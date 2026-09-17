@@ -89,6 +89,26 @@
     <p class="privacy" style="margin-top:.6rem;"><strong>Compatibility:</strong> handles both the modern default OpenSSL 3.x PKCS#12 encryption (AES) and the older legacy encryption (RC2/3DES) used by many existing Windows- and IIS-exported certificates.</p>
   </div>
 
+
+  <div class="card faq">
+    <h2>Troubleshooting</h2>
+    <details><summary>"Wrong password" or a MAC-verification error</summary>
+      <p>Double-check the password. A PKCS#12 (.pfx/.p12) file can be protected with either modern AES encryption or older RC2/3DES encryption, and either way a wrong password fails the same MAC-verification check rather than giving a more specific error.</p>
+    </details>
+    <details><summary>The CA chain file comes out empty</summary>
+      <p>Not every .pfx bundle includes intermediate or root CA certificates &mdash; some are exported as just a leaf certificate and its private key. An empty CA chain file usually means the original export didn't include one, not that something went wrong here.</p>
+    </details>
+  </div>
+
+  <div class="card cli">
+    <h2>Prefer the command line?</h2>
+    <div class="cli-block">openssl pkcs12 -in file.pfx -clcerts -nokeys -out cert.pem
+openssl pkcs12 -in file.pfx -nocerts -nodes -out key.pem
+openssl pkcs12 -in file.pfx -cacerts -nokeys -chain -out ca.pem</div>
+    <p class="privacy">This is exactly what this page does under the hood &mdash; it's tested against real OpenSSL output to make sure the split files match.</p>
+  </div>
+
+
   <div id="ad-slot"></div>
 </main>
 <script src="forge.min.js"></script>
